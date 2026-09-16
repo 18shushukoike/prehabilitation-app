@@ -1,0 +1,18 @@
+[
+  {
+    "study_id": "9001",
+    "pin_hash": "7be24086fa9d855bed6c66b612805036bf330a531297056d116c07efb2202d2e",
+    "pin_plain": "0000",
+    "menu_template": 1,
+    "status": "active",
+    "note": "テスト患者（標準）"
+  },
+  {
+    "study_id": "9002",
+    "pin_hash": "73f934076aa2bc81615e688fbdd22bd48719aabe4a16d06023b2a2b2d0ed0537",
+    "pin_plain": "1111",
+    "menu_template": 2,
+    "status": "active",
+    "note": "テスト患者（低体力）"
+  }
+]

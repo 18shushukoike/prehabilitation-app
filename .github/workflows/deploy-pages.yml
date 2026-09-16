@@ -1,0 +1,53 @@
+# 患者 PWA を GitHub Pages に自動公開する
+# 使い方: リポジトリの Settings → Pages → Source を "GitHub Actions" にし、
+#         Settings → Secrets and variables → Actions → Variables に
+#         VITE_API_URL（Apps Script の URL）, VITE_HOSPITAL_PHONE, VITE_HOSPITAL_NAME を登録して main に push する
+name: Deploy patient PWA to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ['patient-pwa/**', '.github/workflows/deploy-pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: patient-pwa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: patient-pwa/package-lock.json
+      - run: npm ci
+      - run: npm run build
+        env:
+          VITE_BASE: /${{ github.event.repository.name }}/
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_HOSPITAL_PHONE: ${{ vars.VITE_HOSPITAL_PHONE }}
+          VITE_HOSPITAL_NAME: ${{ vars.VITE_HOSPITAL_NAME }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: patient-pwa/dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

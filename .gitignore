@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dev-dist/
+.env
+.env.local
+.DS_Store
+# 対応表・患者情報は絶対にコミットしない
+**/対応表*
+**/*患者名*
+tools/mock-server/logs.jsonl
+tools/mock-server/notifications.jsonl
